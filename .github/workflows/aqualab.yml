@@ -10,7 +10,7 @@ jobs:
   Aqualab_Mysql_To_BigQuery_Sync:
     runs-on: ubuntu-20.04
     steps:
-    -uses: actions/checkout@v2
+    - uses: actions/checkout@v2
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v0
       with:
