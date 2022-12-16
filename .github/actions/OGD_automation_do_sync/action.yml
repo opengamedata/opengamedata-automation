@@ -1,0 +1,12 @@
+name: "Sync All Logs"
+author: Ryan Wilkinson
+description: "Sync all log entries from MySQL to BigQuery for the tables defined in config.py"
+branding:
+  icon: 'arrow-left'
+  color: 'orange'
+runs:
+  using: "composite"
+  steps:
+    - name: Execute sync
+      run: python3.8 main.py
+      shell: bash

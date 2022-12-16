@@ -1,0 +1,93 @@
+name: "Set up config file for a run"
+author: Ryan Wilkinson
+description: "Given a set of appropriate inputs, this action prepares a config.py file for migrating data from MySQL to BigQuery."
+branding:
+  icon: 'clipboard'
+  color: 'blue'
+inputs:
+  log_level:
+    description: "Logging level to use for the sync process"
+    required: true
+    default: "INFO"
+  sql_host:
+    description: "The server hosting the OGD database."
+    required: true
+    default: 'fieldday-logger.ad.education.wisc.edu'
+  vpn_user:
+    description: "Username for logging in to the VPN."
+    required: true
+    default: 'user placeholder'
+  vpn_pass:
+    description: "Password for logging in to the VPN."
+    required: true
+    default: 'password placeholder'
+  sql_user:
+    description: "Username for logging in to the SQL database."
+    required: true
+    default: 'user placeholder'
+  sql_pass:
+    description: "Password for logging in to the SQL database."
+    required: true
+    default: 'password placeholder'
+  sql_db:
+    description: "Which MySQL database to use"
+    required: true
+    default: "opengamedata"
+  sql_table:
+    description: "Which MySQL table to use"
+    required: true
+    default: "AQUALAB"
+  bq_project_id:
+    description: "Which BigQuery Project Id to use"
+    required: true
+    default: "aqualab-57f88"
+  bq_dataset_id:
+    description: "Which BigQuery Dataset Id to use"
+    required: true
+    default: "testing_placeholder"
+  bq_table_basename:
+    description: "Which BigQuery Table Name to use"
+    required: true
+    default: "testing_placeholder"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up config
+      run: cp config/config.py.template config/config.py 
+      shell: bash
+    - name: Set Logger level
+      run: sed -i 's/INFO/${{inputs.log_level}}/g' config/config.py
+      shell: bash
+    - name: Set SSH hostname
+      run: sed -i 's/SSH_HOST_PLACEHOLDER/${{inputs.sql_host}}/g' config/config.py
+      shell: bash
+    - name: Set SSH username
+      run: sed -i 's/SSH_USER_PLACEHOLDER/${{inputs.vpn_user}}/g' config/config.py # Assumes we're using the same SOE-AD user credentials for VPN connection and SSH'ing into the MySQL server
+      shell: bash
+    - name: Set SSH password
+      run: sed -i 's/SSH_PW_PLACEHOLDER/${{inputs.vpn_pass}}/g' config/config.py
+      shell: bash
+    - name: Set MySQL database
+      run: sed -i 's/MYSQL_DB_PLACEHOLDER/${{inputs.sql_db}}/g' config/config.py
+      shell: bash
+    - name: Set MySQL table
+      run: sed -i 's/MYSQL_TABLE_PLACEHOLDER/${{inputs.sql_table}}/g' config/config.py
+      shell: bash
+    - name: Set MySQL username
+      run: sed -i 's/MYSQL_USER_PLACEHOLDER/${{inputs.sql_user}}/g' config/config.py
+      shell: bash
+    - name: Set MySQL password
+      run: sed -i 's/MYSQL_PW_PLACEHOLDER/${{inputs.sql_pass}}/g' config/config.py
+      shell: bash
+    - name: Set BigQuery Project Id
+      run: sed -i 's/BQ_PROJECT_PLACEHOLDER/${{inputs.bq_project_id}}/g' config/config.py
+      shell: bash
+    - name: Set BigQuery Dataset Id
+      run: sed -i 's/BQ_DATASET_PLACEHOLDER/${{inputs.bq_dataset_id}}/g' config/config.py
+      shell: bash
+    - name: Set BigQuery Table Name
+      run: sed -i 's/BQ_TABLE_BASENAME_PLACEHOLDER/${{inputs.bq_table_basename}}/g' config/config.py
+      shell: bash
+  
+    

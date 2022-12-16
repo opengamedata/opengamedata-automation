@@ -1,0 +1,30 @@
+// If you update this file, you'll need to update the protocol buffer definition:
+// protoc --python_out=. BigQueryOgdLogRecord.proto
+
+// The BigQuery Storage API expects protocol buffer data to be encoded in the
+// proto2 wire format.
+
+// Mapping of supported protocol buffer data types to BigQuery data types: https://cloud.google.com/bigquery/docs/write-api#data_type_conversions
+
+syntax = "proto2";
+
+message LogRecord {
+
+    required string session_id = 1;
+    optional string user_id = 2;
+    optional string user_data = 3;
+    optional int64 client_time = 4; // Required in MySQL, but making optional in BigQuery since 0000-00-00 needs to be treated as NULL
+    optional int32 client_offset = 5; // Number of seconds
+    required int64 server_time = 6;
+    required string event_name = 7;
+    required string event_data = 8;
+    required string event_source = 9;
+    optional string game_state = 10;
+    required int32 app_version = 11;
+    optional string app_branch = 12;
+    required int32 log_version = 13;
+    required int64 event_sequence_index = 14;
+    required string remote_addr = 15;
+    optional string http_user_agent = 16;
+    
+}
