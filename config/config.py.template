@@ -1,0 +1,26 @@
+settings = {
+    "LOG_FILE"   : True,
+    "DEBUG_LEVEL": "INFO",
+    "MYSQL_CONFIG": {
+        "SSH_CONFIG":
+        {
+            "SSH_HOST" : "SSH_HOST_PLACEHOLDER",
+            "SSH_USER" : "SSH_USER_PLACEHOLDER",
+            "SSH_PW" : "SSH_PW_PLACEHOLDER",
+            "SSH_PORT" : 22
+        },
+        "DB_HOST" : "127.0.0.1",
+        "DB_PORT" : 3306,
+        "DB_NAME" : "MYSQL_DB_PLACEHOLDER",
+        "DB_TABLE": "MYSQL_TABLE_PLACEHOLDER",
+        "DB_USER" : "MYSQL_USER_PLACEHOLDER",
+        "DB_PW"   : "MYSQL_PW_PLACEHOLDER",
+        "SOURCE_TYPE": "OPEN_GAME_DATA"
+    },
+    "BIGQUERY_CONFIG": {
+        "PROJECT_ID": "BQ_PROJECT_PLACEHOLDER",
+        "DATASET_ID": "BQ_DATASET_PLACEHOLDER",
+        "TABLE_BASENAME": "BQ_TABLE_BASENAME_PLACEHOLDER", # underscore and shard date will be appended automatically
+        "CREDENTIALS_FILEPATH": "" # Path to json file with credentials. Not used if the script is being executed by Github Actions
+    }
+}

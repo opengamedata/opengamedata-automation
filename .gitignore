@@ -1,3 +1,7 @@
+# Don't commit a real config file or Google Cloud credentials in a json file
+config/config.py
+config/*.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
