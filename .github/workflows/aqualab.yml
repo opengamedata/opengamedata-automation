@@ -15,7 +15,7 @@ jobs:
     - name: Install OpenConnect
       run: sudo apt-get update && sudo apt-get install openconnect
     - name: Connect to VPN
-      run: echo ${{ secrets.FIELDDAY_VPN_PASSWORD }} | sudo openconnect --protocol=gp -u ${{ secrets.FIELDDAY_VPN_USERNAME }} --passwd-on-stdin soe.vpn.wisc.edu &
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v0
       with:
