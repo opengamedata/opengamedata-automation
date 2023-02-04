@@ -35,7 +35,7 @@ jobs:
         bq_dataset_id: "nightly_dumps_testing" # TODO: Replace me for the real workflow
         bq_table_basename: "test_opengamedata_aqualab" # TODO: Replace me for the real workflow
     - name: Do the sync
-      uses: ./github/actions/OGD_automation_do_sync
+      uses: ./.github/actions/OGD_automation_do_sync
     - name: Upload logs as artifacts
       uses: actions/upload-artifact@v2
       with:
