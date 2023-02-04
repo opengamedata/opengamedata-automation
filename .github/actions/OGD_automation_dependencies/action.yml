@@ -41,3 +41,4 @@ runs:
         python3.8 -m pip install setuptools --quiet
         python3.8 -m pip install wheel --quiet
         python3.8 -m pip install -r requirements.txt --quiet
+      shell: bash  
