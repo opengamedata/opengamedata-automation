@@ -1,6 +1,7 @@
 name: Aqualab MySQL to BigQuery Test
 on:
-  schedule:
+  workflow_dispatch:
+  # schedule:
     # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
     # * is a special character in YAML, so must be quoted
     # Run at 09:30 UTC every day which is 03:30 CST/04:30 CDT
