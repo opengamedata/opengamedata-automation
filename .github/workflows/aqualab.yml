@@ -27,7 +27,7 @@ jobs:
     - name: Set up config.py file from config.py.template
       uses: ./.github/actions/OGD_automation_config
       with:
-        log_level: "INFO"
+        log_level: "DEBUG"
         sql_host: ${{secrets.OGD_LOGGING_HOST}} 
         vpn_user: ${{secrets.VPN_USER}} # Assumes we're using the same SOE-AD user credentials for VPN connection and SSH'ing into the MySQL server
         vpn_pass: ${{secrets.VPN_PASS}}
