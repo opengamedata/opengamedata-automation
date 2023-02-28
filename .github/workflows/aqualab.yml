@@ -28,11 +28,11 @@ jobs:
       uses: ./.github/actions/OGD_automation_config
       with:
         log_level: "INFO"
-        sql_host: ${{secrets.SQL_HOST}} 
+        sql_host: ${{secrets.OGD_LOGGING_HOST}} 
         vpn_user: ${{secrets.VPN_USER}} # Assumes we're using the same SOE-AD user credentials for VPN connection and SSH'ing into the MySQL server
         vpn_pass: ${{secrets.VPN_PASS}}
-        sql_user: ${{secrets.SQL_USER}} 
-        sql_pass: ${{secrets.SQL_PASS}} 
+        sql_user: ${{secrets.OGD_ARCHIVING_USER}} 
+        sql_pass: ${{secrets.OGD_ARCHIVING_PASS}} 
         sql_db: "opengamedata"
         sql_table: "AQUALAB"
         bq_project_id: ${{ secrets.BQ_AQUALAB_PROJECT_ID }}
