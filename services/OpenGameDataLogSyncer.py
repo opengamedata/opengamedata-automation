@@ -33,7 +33,15 @@ class OpenGameDataLogSyncer:
     #    which could be a performance nightmare.
     # 6. Go back to Step 1. 
 
-    def SyncAll(self) -> int:
+    def SyncAll(self, maxDaysToSync:int = 100) -> int:
+        """Function to synchronize as much data as possible to long-term storage.
+        Uses a limit on the number of days to synchronize, to ensure we don't have the process run an overlong time.
+
+        :param maxDaysToSync: The maximum number of days-worth of data to synchronize, defaults to 100
+        :type maxDaysToSync: int, optional
+        :return: The number of days synchronized to long-term storage.
+        :rtype: int
+        """
         
         # Establish a MySQL connection, set long timeouts for our session
         self._mysqlInterface = MySQLInterface(self._config)
@@ -45,10 +53,6 @@ class OpenGameDataLogSyncer:
         if dateToMigrate is None:
             Logger.Log('No MySQL entries require migration to BigQuery', logging.INFO)
             return 0
-
-        # Maximum number of days worth of logs that we'll try to sync in one execution of SyncAll()
-        # This is mostly a sanity check to ensure the script doesn't run forever
-        maxDaysToSync = 100
 
         # Number of days we've sync'd for this execution of SyncAll()
         numDaysSynced = 0
@@ -66,7 +70,7 @@ class OpenGameDataLogSyncer:
             
         return numDaysSynced
 
-    def SyncDate(self, dateToMigrate: datetime.date) -> None:
+    def SyncDate(self, dateToMigrate:datetime.date) -> None:
 
         # 1. For a given day fetch a cursor for all the day's log rows in MySQL
         # 2. Create a BigQuery table following the naming convention {TableBasename}_YYYYMMDD if one doesn't exist
