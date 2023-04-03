@@ -4,9 +4,11 @@ description: "Sync all log entries from MySQL to BigQuery for the tables defined
 branding:
   icon: 'arrow-left'
   color: 'orange'
+inputs:
+  max_days:
+    description: "Maximum number of days to sync"
+    required: false
+    default: "90"
 runs:
   using: "composite"
   steps:
-    - name: Execute sync
-      run: python3.8 main.py
-      shell: bash

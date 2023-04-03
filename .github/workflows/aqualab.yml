@@ -1,6 +1,11 @@
 name: Aqualab MySQL to BigQuery Test
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+    inputs:
+      max_days:
+        description: "The maximum number of days to export"
+        required: false
+        default: 100
   # schedule:
     # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
     # * is a special character in YAML, so must be quoted
@@ -38,8 +43,8 @@ jobs:
         bq_project_id: ${{ secrets.BQ_AQUALAB_PROJECT_ID }}
         bq_dataset_id: "nightly_dumps_testing" # TODO: Replace me for the real workflow
         bq_table_basename: "test_opengamedata_aqualab" # TODO: Replace me for the real workflow
-    - name: Do the sync
-      uses: ./.github/actions/OGD_automation_do_sync
+    - name: Execute sync
+      run: python3.8 main.py --max_days=${{ github.event.inputs.max_days }}
     - name: Upload logs as artifacts
       uses: actions/upload-artifact@v2
       with:
