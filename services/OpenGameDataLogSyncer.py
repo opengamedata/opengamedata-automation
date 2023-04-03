@@ -83,10 +83,10 @@ class OpenGameDataLogSyncer:
         # 4. Close, write, and commit the BigQuery write stream 
         # 5. Close the MySQL cursor
 
-        mysqlTablePath = self._config["MYSQL_CONFIG"]["DB_NAME"] + "." + self._config["MYSQL_CONFIG"]["DB_TABLE"]
+        mysqlTablePath = f"{self._config['MYSQL_CONFIG']['DB_NAME']}.{self._config['MYSQL_CONFIG']['DB_TABLE']}"
 
-        bqFqTableId = self._config["BIGQUERY_CONFIG"]["PROJECT_ID"] + "." + self._config["BIGQUERY_CONFIG"]["DATASET_ID"]\
-            + "." + self._config["BIGQUERY_CONFIG"]["TABLE_BASENAME"] + "_" + dateToMigrate.strftime('%Y%m%d')
+        bqFqTableId = f"{self._config['BIGQUERY_CONFIG']['PROJECT_ID']}.{self._config['BIGQUERY_CONFIG']['DATASET_ID']}\
+                       .{self._config['BIGQUERY_CONFIG']['TABLE_BASENAME']}_{dateToMigrate.strftime('%Y%m%d')}"
 
 
         Logger.Log("Begin syncing log entries for: " + str(dateToMigrate) + " from MySQL: " + mysqlTablePath + " to BigQuery: " + bqFqTableId)
@@ -95,8 +95,8 @@ class OpenGameDataLogSyncer:
         if self._mysqlInterface is not None:
             migrationStatusCounts = self._mysqlInterface.GetMigrationStatusCountsByDate(dateToMigrate)
 
-            Logger.Log('For: ' + str(dateToMigrate) + ' Found ' + str(migrationStatusCounts[0]) + ' MySQL rows marked as requiring migration', logging.INFO)
-            Logger.Log('For: ' + str(dateToMigrate) + ' Found ' + str(migrationStatusCounts[1]) + ' MySQL rows marked as already migrated', logging.INFO)
+            Logger.Log(f'For: {str(dateToMigrate)} Found {str(migrationStatusCounts[0])} MySQL rows marked as requiring migration', logging.INFO)
+            Logger.Log(f'For: {str(dateToMigrate)} Found {str(migrationStatusCounts[1])} MySQL rows marked as already migrated', logging.INFO)
 
             bqInterface = BigQueryInterface(self._config["BIGQUERY_CONFIG"])
 
@@ -107,7 +107,7 @@ class OpenGameDataLogSyncer:
 
                 # Get a count of existing entries
                 numBqTableEntriesBefore = bqInterface.GetTableCount(bqFqTableId)
-                Logger.Log("For: " + str(dateToMigrate) + ' Found ' + str(numBqTableEntriesBefore) + ' existing BigQuery rows.', logging.INFO)
+                Logger.Log(f"For: {str(dateToMigrate)} Found {str(numBqTableEntriesBefore)} existing BigQuery rows.", logging.INFO)
             else:
                 # Create the table
                 bqInterface.CreateTable(bqFqTableId, BigQueryLogTableSchema.schema)
@@ -149,8 +149,8 @@ class OpenGameDataLogSyncer:
                 # we'll send the request and start a new request before adding the row
                 if sizeOfserializedRowData + estimatedRequestSize >= maxRequestSizeInBytes:
 
-                    Logger.Log("Estimated request size: " + str(estimatedRequestSize) + " bytes", logging.DEBUG)
-                    Logger.Log("Creating append rows request number: " + str(numRequests + 1) + " containing " + str(numRowsInRequest) + " rows with offset: " + str(offset) + " and sending", logging.INFO)
+                    Logger.Log(f"Estimated request size: {str(estimatedRequestSize)} bytes", logging.DEBUG)
+                    Logger.Log(f"Creating append rows request number: {str(numRequests + 1)} containing {str(numRowsInRequest)} rows with offset: {str(offset)} and sending", logging.INFO)
 
                     # The size of a single AppendRowsRequest must be less than 10 MB in size
                     # https://cloud.google.com/python/docs/reference/bigquerystorage/latest/google.cloud.bigquery_storage_v1.client.BigQueryWriteClient
@@ -161,7 +161,7 @@ class OpenGameDataLogSyncer:
                     
                     # TODO: Could try deferring the response logging until all the requests have been sent. I believe the sends are supposed to be asynchronous, so .result() might wait until they resolve.
                     # Not seeing much difference with days that don't have millions of log entries
-                    Logger.Log("For request number: " + str(numRequests + 1) + " with offset: " + str(offset) + " Request response result: " + str(bqAppendRowsResponses[len(bqAppendRowsResponses) - 1].result()), logging.DEBUG)
+                    Logger.Log(f"For request number: {str(numRequests + 1)} with offset: {str(offset)} Request response result: {str(bqAppendRowsResponses[len(bqAppendRowsResponses) - 1].result())}", logging.DEBUG)
                     
                     # Update our offset
                     offset += numRowsInRequest
@@ -195,33 +195,33 @@ class OpenGameDataLogSyncer:
             if not numRowsInRequest == 0:
 
                 # Send it now
-                Logger.Log("Estimated request size: " + str(estimatedRequestSize) + " bytes", logging.DEBUG)
-                Logger.Log("Creating final append rows request number: " + str(numRequests + 1) + " containing " + str(numRowsInRequest) + " rows with offset: " + str(offset) + " and sending", logging.INFO)
+                Logger.Log(f"Estimated request size: {str(estimatedRequestSize)} bytes", logging.DEBUG)
+                Logger.Log(f"Creating final append rows request number: {str(numRequests + 1)} containing {str(numRowsInRequest)} rows with offset: {str(offset)} and sending", logging.INFO)
                 bqAppendRowsRequest = BigQueryWriteInterface.GetAppendRowsRequest(protoRows, offset)
 
                 bqAppendRowsResponses.append(bqWriteInterface.SendAppendRowsRequest(numRequests, bqAppendRowsRequest))
-                Logger.Log("For request number: " + str(numRequests + 1) + " with offset: " + str(offset) + " Request response result: " + str(bqAppendRowsResponses[len(bqAppendRowsResponses) - 1].result()), logging.DEBUG)
+                Logger.Log(f"For request number: {str(numRequests + 1)} with offset: {str(offset)} Request response result: {str(bqAppendRowsResponses[len(bqAppendRowsResponses) - 1].result())}", logging.DEBUG)
 
                 numRequests += 1
 
             bqWriteInterface.CloseFinalizeAndCommit()
 
-            Logger.Log(str(numExportedRows) + " MySQL log entries sent to: " + bqFqTableId, logging.INFO)
+            Logger.Log(f"{str(numExportedRows)} MySQL log entries sent to: {bqFqTableId}", logging.INFO)
 
             numBqTableEntriesAfter = bqInterface.GetTableCount(bqFqTableId)
-            Logger.Log("For: " + str(dateToMigrate) + ' found ' + str(numBqTableEntriesAfter) + ' BigQuery rows', logging.INFO)
+            Logger.Log(f"For: {str(dateToMigrate)} found {str(numBqTableEntriesAfter)} BigQuery rows", logging.INFO)
 
             numRowsConfirmedInserted = numBqTableEntriesAfter - numBqTableEntriesBefore
 
             if numRowsConfirmedInserted < migrationStatusCounts[0]:
-                Logger.Log("Expected to migrate " + str(migrationStatusCounts[0]) + " rows from MySQL, but only " + str(numRowsConfirmedInserted) + " new rows found in BigQuery", logging.FATAL)
+                Logger.Log(f"Expected to migrate {str(migrationStatusCounts[0])} rows from MySQL, but only {str(numRowsConfirmedInserted)} new rows found in BigQuery", logging.FATAL)
                 raise Exception("Missing expected log entries in BigQuery")
                 sys.exit(1) # This is unrecoverable, don't allow catching or continuing
 
             self._mysqlInterface.MarkLogEntriesAsSynced(dateToMigrate)        
-            Logger.Log("MySQL entries for " + str(dateToMigrate) + " have all been marked as synced")
+            Logger.Log(f"MySQL entries for {str(dateToMigrate)} have all been marked as synced")
 
             
-            Logger.Log("Completed syncing log entries for: " + str(dateToMigrate))
+            Logger.Log(f"Completed syncing log entries for: {str(dateToMigrate)}")
         else:
             Logger.Log(f"Could not sync log entries for {str(dateToMigrate)}, the MySQLInterface was None!")
