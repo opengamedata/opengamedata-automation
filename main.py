@@ -25,7 +25,10 @@ Logger.Log("Begin MySQL to BigQuery sync job", logging.INFO)
 args : Namespace = parser.parse_args()
 
 logSyncService = OpenGameDataLogSyncer(script_settings)
-numDaysSynced = logSyncService.SyncAll(maxDaysToSync=args.max_days or 100) 
+_max = maxDaysToSync=args.max_days
+if _max is None or _max == "":
+    _max = 100
+numDaysSynced = logSyncService.SyncAll(_max) 
 
 Logger.Log(str(numDaysSynced) + " days of logs were synced from MySQL to BigQuery", logging.INFO)
 
