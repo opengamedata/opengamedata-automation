@@ -33,7 +33,7 @@ jobs:
       uses: ./.github/actions/OGD_automation_config
       with:
         log_level: "DEBUG"
-        sql_host: ${{secrets.OGD_LOGGING_HOST}} 
+        sql_host: ${{vars.OGD_LOGGER_HOST}} 
         vpn_user: ${{secrets.VPN_USER}} # Assumes we're using the same SOE-AD user credentials for VPN connection and SSH'ing into the MySQL server
         vpn_pass: ${{secrets.VPN_PASS}}
         sql_user: ${{secrets.OGD_ARCHIVING_USER}} 
@@ -49,3 +49,15 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: ./*.log
+
+  # Cleanup_Synced_Rows:
+  #   name: Cleanup Synced Rows
+  #   runs-on: ubuntu-22.04
+  #   needs: Aqualab_Mysql_To_BigQuery_Sync
+  #   steps:
+  #   - name: Remove old synced events # TODO: figure out/set up key secret for logging in to logger host
+  #     run: |
+  #       mkdir -p ~/.ssh
+  #       echo '${{secrets.FILE_DEPLOY_KEY}}' >> ./key.txt
+  #       chmod 600 ./key.txt
+  #       ssh -o StrictHostKeyChecking=no -i ./key.txt ${{secrets.VPN_USER}}@${{vars.OGD_LOGGER_HOST}} "mysql -u${{secrets.OGD_ARCHIVING_USER}} -p${{secrets.OGD_ARCHIVING_PASS}} -e 'select count(*) from opengamedata.AQUALAB where synced=1 and datediff(now(), server_time) > 7'"
