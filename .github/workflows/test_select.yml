@@ -19,7 +19,7 @@ jobs:
   Cleanup_Synced_Rows:
     name: Cleanup Synced Rows
     runs-on: ubuntu-22.04
-    needs: Aqualab_Mysql_To_BigQuery_Sync
+    needs: Connection_to_VPN
     steps:
     - name: Remove old synced events # TODO: figure out/set up key secret for logging in to logger host
       run: |
