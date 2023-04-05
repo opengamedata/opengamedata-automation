@@ -83,10 +83,11 @@ class OpenGameDataLogSyncer:
         # 4. Close, write, and commit the BigQuery write stream 
         # 5. Close the MySQL cursor
 
-        mysqlTablePath = f"{self._config['MYSQL_CONFIG']['DB_NAME']}.{self._config['MYSQL_CONFIG']['DB_TABLE']}"
+        _mysql_config = self._config.get('MYSQL_CONFIG', {})
+        mysqlTablePath = f"{_mysql_config['DB_NAME']}.{_mysql_config['DB_TABLE']}"
 
-        bqFqTableId = f"{self._config['BIGQUERY_CONFIG']['PROJECT_ID']}.{self._config['BIGQUERY_CONFIG']['DATASET_ID']}\
-                       .{self._config['BIGQUERY_CONFIG']['TABLE_BASENAME']}_{dateToMigrate.strftime('%Y%m%d')}"
+        _bq_config = self._config.get('BIGQUERY_CONFIG', {})
+        bqFqTableId = f"{_bq_config['PROJECT_ID']}.{_bq_config['DATASET_ID']}.{_bq_config['TABLE_BASENAME']}_{dateToMigrate.strftime('%Y%m%d')}"
 
 
         Logger.Log("Begin syncing log entries for: " + str(dateToMigrate) + " from MySQL: " + mysqlTablePath + " to BigQuery: " + bqFqTableId)
