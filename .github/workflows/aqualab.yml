@@ -44,7 +44,7 @@ jobs:
         bq_dataset_id: "aqualab" # TODO: Replace me for the real workflow
         bq_table_basename: "aqualab_daily" # TODO: Replace me for the real workflow
     - name: Execute sync
-      run: python3.8 main.py --max_days=${{ github.event.inputs.max_days }}
+      run: python3.8 main.py AQUALAB --max_days=${{ github.event.inputs.max_days }}
     - name: Upload logs as artifacts
       uses: actions/upload-artifact@v2
       with:
