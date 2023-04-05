@@ -13,22 +13,15 @@ from config.config import settings as script_settings
 parser = ArgumentParser(add_help=False)
 parser.add_argument("game", type=str.upper,
                     help="The game to use with the given command.")
-range_parser = ArgumentParser(add_help=False, parents=[parser])
-# range_parser.add_argument("start_date", nargs="?", default=None,
-#                     help="The starting date of an export range in MM/DD/YYYY format (defaults to today).")
-# range_parser.add_argument("end_date", nargs="?", default=None,
-#                     help="The ending date of an export range in MM/DD/YYYY format (defaults to today).")
-range_parser.add_argument("-M", "--max_days", default="",
+parser.add_argument("-m", "--max_days", nargs=1, type=int, required=False, default=100,
                     help="Tell the program the maximum number of days to sync.")
-Logger.Log("Begin MySQL to BigQuery sync job", logging.INFO)
 
 args : Namespace = parser.parse_args()
 
+Logger.Log(f"Begin MySQL to BigQuery sync job on {args.game}, up to {args.max_days} days.", logging.INFO)
+
 logSyncService = OpenGameDataLogSyncer(script_settings)
-_max = maxDaysToSync=args.max_days
-if _max is None or _max == "":
-    _max = 100
-numDaysSynced = logSyncService.SyncAll(_max) 
+numDaysSynced = logSyncService.SyncAll(maxDaysToSync=args.max_days) 
 
 Logger.Log(str(numDaysSynced) + " days of logs were synced from MySQL to BigQuery", logging.INFO)
 
