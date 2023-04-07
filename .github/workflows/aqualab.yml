@@ -55,9 +55,11 @@ jobs:
     runs-on: ubuntu-22.04
     needs: Aqualab_Mysql_To_BigQuery_Sync
     steps:
-    - name: Remove old synced events # TODO: figure out/set up key secret for logging in to logger host
+    - name: Setup server key # TODO: figure out/set up key secret for logging in to logger host
       run: |
         mkdir -p ~/.ssh
         echo '${{secrets.FILE_DEPLOY_KEY}}' >> ./key.txt
         chmod 600 ./key.txt
+    - name: Test connection
+      run:
         ssh -o StrictHostKeyChecking=no -i ./key.txt ${{secrets.VPN_USER}}@${{vars.OGD_LOGGER_HOST}} "mysql -u${{secrets.OGD_ARCHIVING_USER}} -p${{secrets.OGD_ARCHIVING_PASS}} -e 'select count(*) from opengamedata.AQUALAB where synced=1 and datediff(now(), server_time) > 7'"
