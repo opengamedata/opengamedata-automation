@@ -15,27 +15,27 @@ from google.cloud.bigquery_storage_v1 import types
 
 # This class facilitates the migration of log entries from MySQL to BigQuery
 class OpenGameDataLogSyncer:
-    
+    """Class to sync all log entries for a specified OGD log table, batched by date
+    """
+
     def __init__(self, config:Dict[str,Any]):
         self._config  = config
         self._mysqlInterface: Optional[MySQLInterface] = None
 
-    # Sync all log entries for a specified OGD log table, batched by date
-
-    # Workflow:
-    # 1. Get date of the oldest unmigrated row in MySQL table (oldest row where synced = 0)
-    # 2. Create a BigQuery table for that date if a table doesn't already exist
-    # 3. Get all MySQL rows for that date
-    # 4. Send all MySQL rows for that date to BigQuery and commit
-    # 5. Set the synced field to 1 for all MySQL rows for that date
-    #    There is a risk that new log entries for that date will be added to MySQL between steps 3 and 5, but this should not
-    #    happen. The alternative would be storing potentially millions of ids and using that as the WHERE criteria for the UPDATE, 
-    #    which could be a performance nightmare.
-    # 6. Go back to Step 1. 
-
     def SyncAll(self, maxDaysToSync:int = 100) -> int:
         """Function to synchronize as much data as possible to long-term storage.
         Uses a limit on the number of days to synchronize, to ensure we don't have the process run an overlong time.
+
+        Performed in the following steps:
+        1. Get date of the oldest unmigrated row in MySQL table (oldest row where synced = 0)
+        2. Create a BigQuery table for that date if a table doesn't already exist
+        3. Get all MySQL rows for that date
+        4. Send all MySQL rows for that date to BigQuery and commit
+        5. Set the synced field to 1 for all MySQL rows for that date
+           There is a risk that new log entries for that date will be added to MySQL between steps 3 and 5, but this should not
+           happen. The alternative would be storing potentially millions of ids and using that as the WHERE criteria for the UPDATE, 
+           which could be a performance nightmare.
+        6. Go back to Step 1. 
 
         :param maxDaysToSync: The maximum number of days-worth of data to synchronize, defaults to 100
         :type maxDaysToSync: int, optional
@@ -71,17 +71,24 @@ class OpenGameDataLogSyncer:
         return numDaysSynced
 
     def SyncDate(self, dateToMigrate:datetime.date) -> None:
+        """Function to synchronize an individual date.
+        
+        Performed in the following steps:
+        1. For a given day fetch a cursor for all the day's log rows in MySQL
+        2. Create a BigQuery table following the naming convention {TableBasename}_YYYYMMDD if one doesn't exist
+        3. Create a "PENDING" mode BigQuery write stream
+             Pending mode: Records are buffered in a pending state until you commit the stream. When you commit a stream, 
+             all of the pending data becomes available for reading. The commit is an atomic operation. Use this mode for 
+             batch workloads, as an alternative to BigQuery load jobs.
+             https://cloud.google.com/bigquery/docs/write-api#application-created_streams
+        3. Iterate over the MySQL cursor, creating requests containing batches of rows. Send each request to the stream when it nears the 10 MB limit.
+        4. Close, write, and commit the BigQuery write stream 
+        5. Close the MySQL cursor
 
-        # 1. For a given day fetch a cursor for all the day's log rows in MySQL
-        # 2. Create a BigQuery table following the naming convention {TableBasename}_YYYYMMDD if one doesn't exist
-        # 3. Create a "PENDING" mode BigQuery write stream
-        #      Pending mode: Records are buffered in a pending state until you commit the stream. When you commit a stream, 
-        #      all of the pending data becomes available for reading. The commit is an atomic operation. Use this mode for 
-        #      batch workloads, as an alternative to BigQuery load jobs.
-        #      https://cloud.google.com/bigquery/docs/write-api#application-created_streams
-        # 3. Iterate over the MySQL cursor, creating requests containing batches of rows. Send each request to the stream when it nears the 10 MB limit.
-        # 4. Close, write, and commit the BigQuery write stream 
-        # 5. Close the MySQL cursor
+        :param dateToMigrate: _description_
+        :type dateToMigrate: datetime.date
+        :raises Exception: _description_
+        """
 
         _mysql_config = self._config.get('MYSQL_CONFIG', {})
         mysqlTablePath = f"{_mysql_config['DB_NAME']}.{_mysql_config['DB_TABLE']}"
