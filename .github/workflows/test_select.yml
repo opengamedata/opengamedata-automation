@@ -8,11 +8,23 @@ on:
     # TODO: Uncomment when we're read to schedule
     #- cron: '30 9 * * *'
 jobs:
+  Connection_to_VPN:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install OpenConnect
+      run: sudo apt-get update && sudo apt-get install openconnect
+    - name: Connect to VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
   Cleanup_Synced_Rows:
     name: Cleanup Synced Rows
     runs-on: ubuntu-22.04
-    needs: Aqualab_Mysql_To_BigQuery_Sync
+    needs: Connection_to_VPN
     steps:
+    - name: Install OpenConnect
+      run: sudo apt-get update && sudo apt-get install openconnect
+    - name: Connect to VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
     - name: Remove old synced events # TODO: figure out/set up key secret for logging in to logger host
       run: |
         mkdir -p ~/.ssh
