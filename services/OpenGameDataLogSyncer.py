@@ -1,8 +1,8 @@
 # Standard module imports
 import logging
 import sys
-from datetime import datetime, time
-from typing import Any, Dict, List, Tuple, Optional
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 # Local module imports
 from interfaces.BigQueryInterface import BigQueryInterface, BigQueryWriteInterface, SourceDataRowFormatType
