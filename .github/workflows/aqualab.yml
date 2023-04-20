@@ -5,13 +5,13 @@ on:
       max_days:
         description: "The maximum number of days to export"
         required: false
-        default: 100
-  # schedule:
+        default: 30
+  schedule:
     # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
     # * is a special character in YAML, so must be quoted
     # Run at 09:30 UTC every day which is 03:30 CST/04:30 CDT
     # TODO: Uncomment when we're read to schedule
-    #- cron: '30 9 * * *'
+    - cron: '30 9 * * *'
 jobs:
   Mysql_To_BigQuery_Sync:
     runs-on: ubuntu-20.04
@@ -44,7 +44,7 @@ jobs:
         bq_dataset_id: "aqualab" # TODO: Replace me for the real workflow
         bq_table_basename: "aqualab_daily" # TODO: Replace me for the real workflow
     - name: Execute sync
-      run: python3.8 main.py AQUALAB --max_days=${{ github.event.inputs.max_days }}
+      run: python3.8 main.py AQUALAB --max_days=${{ github.event.inputs.max_days || 7 }}
     - name: Upload logs as artifacts
       uses: actions/upload-artifact@v3
       with:
