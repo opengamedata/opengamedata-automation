@@ -4,7 +4,7 @@ on:
     inputs:
       max_days:
         description: "The maximum number of days to export"
-        required:false
+        required: false
         type: string
         default: "30"
   schedule:
