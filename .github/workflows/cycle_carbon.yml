@@ -5,7 +5,8 @@ on:
       max_days:
         description: "The maximum number of days to export"
         required: false
-        default: 30
+        type: string
+        default: "30"
   schedule:
     # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
     # * is a special character in YAML, so must be quoted
