@@ -208,10 +208,11 @@ class BigQueryWriteInterface:
             # We'll add in the milliseconds column (client_time_ms) from MySQL
             row.client_time = int(round(mysqlRow['client_time'].timestamp())) * 1000000 + mysqlRow['client_time_ms'] * 1000
 
-        # casting datetime.timedelta type to integer number of seconds because
-        # BigQuery's TIME type cannot store negative values
-        # and casting to string produces day-based offsets for negative values e.g. "-1 day, 19:00:00" for "-06:00:00"
-        row.client_offset = round(mysqlRow['client_offset'].total_seconds()) 
+        if not mysqlRow['client_offset'] is None:
+            # casting datetime.timedelta type to integer number of seconds because
+            # BigQuery's TIME type cannot store negative values
+            # and casting to string produces day-based offsets for negative values e.g. "-1 day, 19:00:00" for "-06:00:00"
+            row.client_offset = round(mysqlRow['client_offset'].total_seconds())
 
         # server_time in MySQL is not UTC, it's local America/Chicago, but in the future might be logged as UTC
         # When we send this to BigQuery, BigQuery always assumes the timestamp is UTC

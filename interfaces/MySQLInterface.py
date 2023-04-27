@@ -342,6 +342,10 @@ class MySQLInterface(DataInterface):
 
         self._db_cursor.close()
 
+        # If there's no log entries for the given date
+        if len(response) == 0:
+            return [0,0,0] # unsynced, synced, either/all
+        
         return [response[0][0], response[0][1], response[0][0] + response[0][1]] # unsynced, synced, either/all
 
     # Mark all log entries as synced for the given date
@@ -431,8 +435,8 @@ class MySQLInterface(DataInterface):
         # for "yesterday" while this script is running.
         maximumDateToSync = date.today() - timedelta(days=2) # two days ago
 
-        # If we have a maximum server_time entry
-        if result is not None:
+        # If we have a maximum server_time entry for this game
+        if result is not None and result[0][0] is not None:
             # if the max server_time entry is today
             if result[0][0].date() == date.today():
                 # We'll allow syncing of entries through the end of yesterday

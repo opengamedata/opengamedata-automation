@@ -212,7 +212,9 @@ class OpenGameDataLogSyncer:
 
                 numRequests += 1
 
-            bqWriteInterface.CloseFinalizeAndCommit()
+            # If we sent any append rows requests to BQ
+            if not numRequests == 0:
+                bqWriteInterface.CloseFinalizeAndCommit()
 
             Logger.Log(f"{str(numExportedRows)} MySQL log entries sent to: {bqFqTableId}", logging.INFO)
 
