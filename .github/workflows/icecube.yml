@@ -1,4 +1,4 @@
-name: Explore IceCube MySQL to BigQuery Nightly Archive
+name: IceCube MySQL to BigQuery Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:
