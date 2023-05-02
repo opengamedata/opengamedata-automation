@@ -23,7 +23,7 @@ Logger.Log(f"Begin MySQL to BigQuery sync job on {args.game}, up to {args.max_da
 logSyncService = OpenGameDataLogSyncer(script_settings)
 numDaysSynced = logSyncService.SyncAll(maxDaysToSync=args.max_days) 
 
-Logger.Log(str(numDaysSynced) + " days of logs were synced from MySQL to BigQuery", logging.INFO)
+Logger.Log(f"{numDaysSynced} days of logs were synced from MySQL to BigQuery", logging.INFO)
 
 
 Logger.Log("End MySQL to BigQuery sync job", logging.INFO)
