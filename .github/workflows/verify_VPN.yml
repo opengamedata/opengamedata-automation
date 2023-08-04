@@ -18,5 +18,7 @@ jobs:
     - name: Write OpenConnect Installation Info
       run: openconnect --version
     - name: Connect to VPN
-      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+      run: NEEDRESTART_MODE=a echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Do something after connecting
+      run: echo "We made it!"
     
