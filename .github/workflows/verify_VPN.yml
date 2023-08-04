@@ -1,0 +1,20 @@
+name: Verify Can Connect to VPN
+on:
+  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+jobs:
+  VPN_Connect:
+    name: Install OpenConnect and Connect to VPN
+    runs-on: ubuntu-20.04
+
+    steps:
+
+    # 1. Local checkout & config
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Remote config 
+    - name: Install OpenConnect
+      run: sudo apt-get update && sudo apt-get install openconnect
+    - name: Connect to VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    
