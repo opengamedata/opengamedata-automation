@@ -15,7 +15,7 @@ on:
 jobs:
   Mysql_To_BigQuery_Sync:
     name: Archive MySQL data to BigQuery
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
 
