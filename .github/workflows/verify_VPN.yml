@@ -13,12 +13,14 @@ jobs:
       uses: actions/checkout@v3
 
     # 2. Remote config 
+    - name: Set restart mode
+      run: export NEEDRESTART_MODE=a
     - name: Install OpenConnect
       run: sudo apt-get update && sudo apt-get install openconnect
     - name: Write OpenConnect Installation Info
       run: openconnect --version
     - name: Connect to VPN
-      run: NEEDRESTART_MODE=a echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
     - name: Do something after connecting
       run: echo "We made it!"
     
