@@ -1,4 +1,4 @@
-name: Shadowspect MySQL to BigQuery Nightly Archive
+name: Shadowspect Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

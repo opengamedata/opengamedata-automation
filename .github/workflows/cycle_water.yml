@@ -1,4 +1,4 @@
-name: Water Cycle MySQL to BigQuery Nightly Archive
+name: Water Cycle Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

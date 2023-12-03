@@ -1,4 +1,4 @@
-name: Jo Wilder MySQL to BigQuery Nightly Archive
+name: Jo Wilder Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

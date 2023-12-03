@@ -1,4 +1,4 @@
-name: Wind MySQL to BigQuery Nightly Archive
+name: Wind Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

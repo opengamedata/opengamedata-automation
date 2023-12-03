@@ -1,4 +1,4 @@
-name: Magnet MySQL to BigQuery Nightly Archive
+name: Magnet Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

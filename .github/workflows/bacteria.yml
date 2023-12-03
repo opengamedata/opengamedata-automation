@@ -1,4 +1,4 @@
-name: Bacteria MySQL to BigQuery Nightly Archive
+name: Bacteria Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:

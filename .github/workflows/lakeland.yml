@@ -1,4 +1,4 @@
-name: Lakeland MySQL to BigQuery Nightly Archive
+name: Lakeland Nightly Archive
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
     inputs:
