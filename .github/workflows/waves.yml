@@ -10,8 +10,8 @@ on:
   schedule:
     # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
     # * is a special character in YAML, so must be quoted
-    # Run at 09:30 UTC every day which is 03:30 CST/04:30 CDT
-    - cron: '25 10 * * *'
+    # Run at 10:35 UTC every day which is 04:35 CST/05:35 CDT
+    - cron: '35 10 * * *'
 jobs:
   Mysql_To_BigQuery_Sync:
     name: Archive MySQL data to BigQuery
