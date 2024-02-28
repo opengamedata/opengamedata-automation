@@ -34,8 +34,8 @@ jobs:
         sql_db: "opengamedata"
         sql_table: "ICECUBE"
         bq_project_id: ${{ secrets.OGD_BQ_PROJECT_ID }}
-        bq_dataset_id: "earthquake"
-        bq_table_basename: "earthquake_daily"
+        bq_dataset_id: "icecube"
+        bq_table_basename: "icecube_daily"
 
     # 2. Remote config 
     - name: Install OpenConnect
