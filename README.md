@@ -21,7 +21,8 @@ Current workflows are configured to run at the following times:
 | ---        | ---            | ---                      | ---                  |
 |  9:00      | 3:00 (AM)      | 4:00 (AM)                | AQUALAB              |
 |  9:05      | 3:05 (AM)      | 4:05 (AM)                | BACTERIA             |
-|  9:10      | 3:10 (AM)      | 4:10 (AM)                | BALLOON              |
+| 10:45      | 4:45 (AM)      | 5:45 (AM)                | BALLOON              |
+|  9:10      | 3:10 (AM)      | 4:10 (AM)                | BLOOM                |
 |  9:15      | 3:15 (AM)      | 4:15 (AM)                | CRYSTAL              |
 |  9:20      | 3:20 (AM)      | 4:20 (AM)                | CYCLE_CARBON         |
 |  9:25      | 3:25 (AM)      | 4:25 (AM)                | CYCLE_NITROGEN       |
