@@ -74,7 +74,7 @@ jobs:
     - name: Setup server key # TODO: figure out/set up key secret for logging in to logger host
       run: |
         mkdir -p ~/.ssh
-        echo '${{secrets.DEPLOY_KEY}}' >> ./key.txt
+        echo '${{secrets.SERVICE_KEY}}' >> ./key.txt
         chmod 600 ./key.txt
 
     # 2. Cleanup
