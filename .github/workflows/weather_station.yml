@@ -1,0 +1,82 @@
+name: Weather Station Nightly Archive
+on:
+  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+    inputs:
+      max_days:
+        description: "The maximum number of days to export"
+        required: false
+        type: string
+        default: "30"
+  schedule:
+    # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
+    # * is a special character in YAML, so must be quoted
+    # Run at 10:35 UTC every day which is 04:35 CST/05:35 CDT
+    - cron: '50 10 * * *'
+jobs:
+  Mysql_To_BigQuery_Sync:
+    name: Archive MySQL data to BigQuery
+    runs-on: ubuntu-20.04
+
+    steps:
+
+    # 1. Local checkout & config
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Set up config.py file from config.py.template
+      uses: ./.github/actions/OGD_automation_config
+      with:
+        log_level: "DEBUG"
+        sql_host: ${{vars.OGD_LOGGER_HOST}} 
+        vpn_user: ${{secrets.VPN_USER}} # Assumes we're using the same SOE-AD user credentials for VPN connection and SSH'ing into the MySQL server
+        vpn_pass: ${{secrets.VPN_PASS}}
+        sql_user: ${{secrets.OGD_ARCHIVING_USER}} 
+        sql_pass: ${{secrets.OGD_ARCHIVING_PASS}} 
+        sql_db: "opengamedata"
+        sql_table: "WEATHER_STATION"
+        bq_project_id: ${{ secrets.OGD_BQ_PROJECT_ID }}
+        bq_dataset_id: "weather_station"
+        bq_table_basename: "weather_station_daily"
+
+    # 2. Remote config 
+    - name: Install OpenConnect
+      run: sudo apt-get update && sudo apt-get install openconnect
+    - name: Connect to VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.OGD_BQ_PROJECT_ID }}
+        service_account_key: ${{ secrets.OGD_ARCHIVER_BQ_KEY }}
+        export_default_credentials: true
+    - name: Get Dependencies
+      uses: ./.github/actions/OGD_automation_dependencies
+    
+    # 3. Run script
+    - name: Execute sync
+      run: python3.8 main.py WEATHER_STATION --max_days=${{ github.event.inputs.max_days || 7 }}
+    - name: Upload logs as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        path: ./*.log
+
+  Cleanup_Synced_Rows:
+    name: Cleanup Synced Rows
+    runs-on: ubuntu-22.04
+    needs: Mysql_To_BigQuery_Sync
+    steps:
+
+    # 1. Remote config 
+    - name: Install OpenConnect
+      run: sudo apt-get update && sudo apt-get install openconnect
+    - name: Connect to VPN
+      run: echo ${{ secrets.VPN_PASS }} | sudo openconnect --protocol=gp -u ${{ secrets.VPN_USER }} --passwd-on-stdin soe.vpn.wisc.edu &
+    - name: Setup server key # TODO: figure out/set up key secret for logging in to logger host
+      run: |
+        mkdir -p ~/.ssh
+        echo '${{secrets.SERVICE_KEY}}' >> ./key.txt
+        chmod 600 ./key.txt
+
+    # 2. Cleanup
+    - name: Run delete of archived data at least a week old
+      run:
+        ssh -o StrictHostKeyChecking=no -i ./key.txt ${{secrets.VPN_USER}}@${{vars.OGD_LOGGER_HOST}} "mysql -u${{secrets.OGD_ARCHIVING_USER}} -p${{secrets.OGD_ARCHIVING_PASS}} -e 'delete from opengamedata.WEATHER_STATION where synced=1 and datediff(now(), server_time) > 7'"
