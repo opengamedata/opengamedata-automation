@@ -1,4 +1,5 @@
 # opengamedata-automation
+
 A repository for automation scripts to sync OGD logs from MySQL to BigQuery.
 
 Setup:
@@ -8,7 +9,7 @@ Setup:
 * Copy `config.py.template` to `config.py` set server/authentication data and the source & destination db tables
 * Download the authentication key needed for the BigQuery project. Save it as a .json file in the `config` directory and ensure the file path is defined in `config.py`
 
-```
+```bash
 usage: <python> main.py <game> --max-days <count>
 
 <python> is your python command.
