@@ -9,9 +9,11 @@ Setup:
 * Download the authentication key needed for the BigQuery project. Save it as a .json file in the `config` directory and ensure the file path is defined in `config.py`
 
 ```
-usage: <python> main.py
+usage: <python> main.py <game> --max-days <count>
 
 <python> is your python command.
+<game> is the game whose data you wish to move to BigQuery
+<count> is the max number of days-worth of data you wish to move
 ```
 
 These processes are also set up to run automatically in GitHub actions.
