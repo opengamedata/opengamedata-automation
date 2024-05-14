@@ -1,6 +1,6 @@
 name: Verify Can Connect to VPN
 on:
-  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+  workflow_dispatch:
 jobs:
   VPN_Connect:
     name: Install OpenConnect and Connect to VPN

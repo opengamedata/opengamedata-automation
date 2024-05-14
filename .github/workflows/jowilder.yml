@@ -1,6 +1,6 @@
 name: Jo Wilder Nightly Archive
 on:
-  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+  workflow_dispatch:
     inputs:
       max_days:
         description: "The maximum number of days to export"
