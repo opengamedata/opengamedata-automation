@@ -43,4 +43,5 @@ Current workflows are configured to run at the following times:
 | 10:25      | 4:25 (AM)      | 5:25 (AM)                | THERMOVR             |
 | 10:30      | 4:30 (AM)      | 5:30 (AM)                | TRANSFORMATION_QUEST |
 | 10:35      | 4:35 (AM)      | 5:35 (AM)                | WAVES                |
+| 10:50      | 4:50 (AM)      | 5:50 (AM)                | WEATHER_STATION      |
 | 10:40      | 4:40 (AM)      | 5:40 (AM)                | WIND                 |
