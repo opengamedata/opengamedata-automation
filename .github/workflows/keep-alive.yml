@@ -1,0 +1,40 @@
+name: Keep Alive
+on:
+  workflow_dispatch:
+  schedule:
+    # Follows POSIX cron syntax https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07
+    # * is a special character in YAML, so must be quoted
+    # Run at 09:00 UTC every day which is 03:00 CST/04:00 CDT
+    - cron: '0 0 1 */1 *'
+jobs:
+  keep_alive:
+    name: Make a commit to keep the repo alive
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.repository }}-${{ github.ref }}-${{ github.workflow }}
+      cancel-in-progress: true
+
+    steps:
+
+    # 1. Local checkout & config
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Remote config 
+    
+    # 3. Run script
+    - name: Update readme with today's date
+      run: sed -i -r "s@(Last keep-alive on )[[:digit:]]+/[[:digit:]]+/[[:digit:]]+@\1$(date +%D)@"
+    - name: Commit README file
+      run: |
+        git pull
+        git add README.md
+        git diff --staged --quiet || git commit -m "Update Automation README"
+    - name: Push Changes to GitHub
+      run: git push
+
+  # 4. Cleanup & complete
+    - name: Upload logs as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        path: ./*.log
