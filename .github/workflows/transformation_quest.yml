@@ -1,4 +1,5 @@
-name: Transformation Quest Nightly Archive
+name: Transformation Quest Events Archive
+run-name: ${{ format('{0} - {1}', github.workflow, github.event_name == 'schedule' && 'Nightly Run' || 'Manual Run') }}
 on:
   workflow_dispatch:
     inputs:

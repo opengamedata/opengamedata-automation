@@ -1,4 +1,5 @@
-name: Carbon Cycle Nightly Archive
+name: Carbon Cycle Events Archive
+run-name: ${{ format('{0} - {1}', github.workflow, github.event_name == 'schedule' && 'Nightly Run' || 'Manual Run') }}
 on:
   workflow_dispatch:
     inputs:
