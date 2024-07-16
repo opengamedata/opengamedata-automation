@@ -24,7 +24,7 @@ jobs:
     
     # 3. Run script
     - name: Update readme with today's date
-      run: sed -i -r "s@(Last keep-alive on )[[:digit:]]+/[[:digit:]]+/[[:digit:]]+@\1$(date +%D)@"
+      run: sed -i -r "s@(Last keep-alive on )[[:digit:]]+/[[:digit:]]+/[[:digit:]]+@\1$(date +%D)@" README.md
     - name: Commit README file
       run: |
         git pull
