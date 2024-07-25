@@ -63,7 +63,7 @@ class Logger:
             elif level == logging.INFO:
                 Logger.file_logger.info( f"INFO:    {now} {indent}{message}")
             elif level == logging.WARNING:
-                Logger.file_logger.warn( f"WARNING: {now} {indent}{message}")
+                Logger.file_logger.warning( f"WARNING: {now} {indent}{message}")
             elif level == logging.ERROR:
                 Logger.file_logger.error(f"ERROR:   {now} {indent}{message}")
         if Logger.std_logger is not None:
@@ -72,7 +72,7 @@ class Logger:
             elif level == logging.INFO:
                 Logger.std_logger.info( f"INFO:    {indent}{message}")
             elif level == logging.WARNING:
-                Logger.std_logger.warn( f"WARNING: {indent}{message}")
+                Logger.std_logger.warning( f"WARNING: {indent}{message}")
             elif level == logging.ERROR:
                 Logger.std_logger.error(f"ERROR:   {indent}{message}")
 
