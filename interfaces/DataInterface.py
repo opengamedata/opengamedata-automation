@@ -8,9 +8,6 @@ from typing import Any, Dict, List, Tuple, Optional, Union
 # import local files
 from config.config import settings as default_settings
 from interfaces.Interface import Interface
-#from schemas.Event import Event
-#from schemas.IDMode import IDMode
-#from schemas.TableSchema import TableSchema
 from utils import Logger
 
 class DataInterface(Interface):
