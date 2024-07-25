@@ -41,7 +41,7 @@ Current workflows are configured to run at the following times:
 | 10:15      | 4:15 (AM)      | 5:15 (AM)                | SHADOWSPECT          |
 | 10:20      | 4:20 (AM)      | 5:20 (AM)                | SHIPWRECKS           |
 | 10:55      | 4:55 (AM)      | 5:55 (AM)                | SLIDE                |
-| 11:00      | 5:00 (AM)      | 6:00 (AM)                | SLIDE                |
+| 11:00      | 5:00 (AM)      | 6:00 (AM)                | STACK                |
 | 10:25      | 4:25 (AM)      | 5:25 (AM)                | THERMOVR             |
 | 10:30      | 4:30 (AM)      | 5:30 (AM)                | TRANSFORMATION_QUEST |
 | 10:35      | 4:35 (AM)      | 5:35 (AM)                | WAVES                |
