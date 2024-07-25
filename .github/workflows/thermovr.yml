@@ -13,6 +13,11 @@ on:
     # * is a special character in YAML, so must be quoted
     # Run at 10:25 UTC every day which is 04:25 CST/05:25 CDT
     - cron: '25 10 * * *'
+
+env:
+  TABLE_NAME: THERMOVR
+  BQ_DATASET_NAME: thermovr
+
 jobs:
   Mysql_To_BigQuery_Sync:
     name: Archive MySQL data to BigQuery
@@ -33,10 +38,10 @@ jobs:
         sql_user: ${{secrets.OGD_ARCHIVING_USER}} 
         sql_pass: ${{secrets.OGD_ARCHIVING_PASS}} 
         sql_db: "opengamedata"
-        sql_table: "THERMOVR"
+        sql_table: "${{ env.TABLE_NAME }}"
         bq_project_id: ${{ secrets.OGD_BQ_PROJECT_ID }}
-        bq_dataset_id: "thermovr"
-        bq_table_basename: "thermovr_daily"
+        bq_dataset_id: "${{ env.BQ_DATASET_NAME }}"
+        bq_table_basename: "${{ env.BQ_DATASET_NAME }}_daily"
 
     # 2. Remote config 
     - name: Install OpenConnect
@@ -54,7 +59,7 @@ jobs:
     
     # 3. Run script
     - name: Execute sync
-      run: python3.8 main.py THERMOVR --max_days=${{ github.event.inputs.max_days || 7 }}
+      run: python3.8 main.py ${{ env.TABLE_NAME }} --max_days=${{ github.event.inputs.max_days || 7 }}
     - name: Upload logs as artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -81,4 +86,4 @@ jobs:
     # 2. Cleanup
     - name: Run delete of archived data at least a week old
       run:
-        ssh -o StrictHostKeyChecking=no -i ./key.txt ${{secrets.VPN_USER}}@${{vars.OGD_LOGGER_HOST}} "mysql -u${{secrets.OGD_ARCHIVING_USER}} -p${{secrets.OGD_ARCHIVING_PASS}} -e 'delete from opengamedata.THERMOVR where synced=1 and datediff(now(), server_time) > 7'"
+        ssh -o StrictHostKeyChecking=no -i ./key.txt ${{secrets.VPN_USER}}@${{vars.OGD_LOGGER_HOST}} "mysql -u${{secrets.OGD_ARCHIVING_USER}} -p${{secrets.OGD_ARCHIVING_PASS}} -e 'delete from opengamedata.${{ env.TABLE_NAME }} where synced=1 and datediff(now(), server_time) > 7'"
