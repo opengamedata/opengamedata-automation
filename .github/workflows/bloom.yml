@@ -15,7 +15,7 @@ on:
     - cron: '45 10 * * *'
 
 env:
-  TABLE_NAME: ALGAE # TODO: switch to BLOOM once we've changed in the logging side of things.
+  TABLE_NAME: BLOOM
   BQ_DATASET_NAME: bloom
 
 jobs:
