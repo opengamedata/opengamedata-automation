@@ -37,6 +37,7 @@ Current workflows are configured to run at the following times:
 |  9:55      | 3:55 (AM)      | 4:55 (AM)                | LAKELAND             |
 | 10:00      | 4:00 (AM)      | 5:00 (AM)                | MAGNET               |
 | 10:05      | 4:05 (AM)      | 5:05 (AM)                | MASHOPOLIS           |
+| 11:05      | 5:05 (AM)      | 6:05 (AM)                | MATCH                |
 | 10:10      | 4:10 (AM)      | 5:10 (AM)                | PENGUINS             |
 | 10:15      | 4:15 (AM)      | 5:15 (AM)                | SHADOWSPECT          |
 | 10:20      | 4:20 (AM)      | 5:20 (AM)                | SHIPWRECKS           |
