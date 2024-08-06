@@ -21,8 +21,8 @@ These processes are also set up to run automatically in GitHub actions.
 Current workflows are configured to run at the following times:
 
 | Time (UTC) | Time (Central) | Time (Central, Daylight) | Game                 | Status  |
-| ---        | ---            | ---                      | ---                  | ![Aqualab](https://github.com/opengamedata/opengamedata-automation/actions/workflows/aqualab.yml/badge.svg) |
-|  9:00      | 3:00 (AM)      | 4:00 (AM)                | AQUALAB              | |
+| ---        | ---            | ---                      | ---                  | ---     |
+|  9:00      | 3:00 (AM)      | 4:00 (AM)                | AQUALAB              | ![Aqualab](https://github.com/opengamedata/opengamedata-automation/actions/workflows/aqualab.yml/badge.svg) |
 |  9:05      | 3:05 (AM)      | 4:05 (AM)                | BACTERIA             | |
 | 10:45      | 4:45 (AM)      | 5:45 (AM)                | BALLOON              | |
 |  9:10      | 3:10 (AM)      | 4:10 (AM)                | BLOOM                | |
