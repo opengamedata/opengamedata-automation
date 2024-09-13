@@ -43,7 +43,7 @@ Current workflows are configured to run at the following times:
 | 10:20      | 4:20 (AM)      | 5:20 (AM)                | SHIPWRECKS           | ![Shipwrecks](https://github.com/opengamedata/opengamedata-automation/actions/workflows/shipwrecks.yml/badge.svg) |
 | 10:55      | 4:55 (AM)      | 5:55 (AM)                | SLIDE                | ![Slide](https://github.com/opengamedata/opengamedata-automation/actions/workflows/slide.yml/badge.svg) |
 | 11:00      | 5:00 (AM)      | 6:00 (AM)                | STACK                | ![Stack](https://github.com/opengamedata/opengamedata-automation/actions/workflows/stack.yml/badge.svg) |
-| 10:25      | 4:25 (AM)      | 5:25 (AM)                | THERMOVR             | ![ThermoVR](https://github.com/opengamedata/opengamedata-automation/actions/workflows/thermovr.yml/badge.svg) |
+| 10:25      | 4:25 (AM)      | 5:25 (AM)                | THERMOLAB            | ![Thermo Lab](https://github.com/opengamedata/opengamedata-automation/actions/workflows/thermolab.yml/badge.svg) |
 | 10:30      | 4:30 (AM)      | 5:30 (AM)                | TRANSFORMATION_QUEST | ![Transformations Quest](https://github.com/opengamedata/opengamedata-automation/actions/workflows/transformation_quest.yml/badge.svg) |
 | 10:35      | 4:35 (AM)      | 5:35 (AM)                | WAVES                | ![Waves](https://github.com/opengamedata/opengamedata-automation/actions/workflows/waves.yml/badge.svg) |
 | 10:50      | 4:50 (AM)      | 5:50 (AM)                | WEATHER_STATION      | ![Weather Station](https://github.com/opengamedata/opengamedata-automation/actions/workflows/weather_station.yml/badge.svg) |

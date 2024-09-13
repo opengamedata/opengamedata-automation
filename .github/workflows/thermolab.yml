@@ -1,4 +1,4 @@
-name: Thermo VR Events Archive
+name: Thermo Lab Events Archive
 run-name: ${{ format('{0} - {1}', github.workflow, github.event_name == 'schedule' && 'Nightly Run' || 'Manual Run') }}
 on:
   workflow_dispatch:
@@ -15,8 +15,8 @@ on:
     - cron: '25 10 * * *'
 
 env:
-  TABLE_NAME: THERMOVR
-  BQ_DATASET_NAME: thermovr
+  TABLE_NAME: THERMOLAB
+  BQ_DATASET_NAME: thermolab
 
 jobs:
   Mysql_To_BigQuery_Sync:
